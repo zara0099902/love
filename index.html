@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Amar ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  font-family: Georgia, serif;
+  overflow: hidden;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Sparkles */
+.sparkle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:0} 50%{opacity:1} }
+
+/* Falling roses */
+.rose {
+  position: absolute;
+  top: -50px;
+  font-size: 24px;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+/* Envelope */
+.envelope {
+  width: 160px;
+  height: 110px;
+  background: #c4002f;
+  position: relative;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: transform 0.4s;
+}
+.envelope:hover { transform: scale(1.05); }
+
+.flap {
+  position: absolute;
+  top: -55px;
+  width: 0;
+  height: 0;
+  border-left: 80px solid transparent;
+  border-right: 80px solid transparent;
+  border-bottom: 55px solid #e6003a;
+  transform-origin: bottom;
+  transition: transform 0.6s ease;
+}
+.open .flap { transform: rotateX(180deg); }
+
+/* Card */
+.card {
+  position: absolute;
+  width: 140px;
+  height: 180px;
+  background: #ff1a4d;
+  top: -180px;
+  left: 10px;
+  border-radius: 10px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+}
+.show { display: flex; }
+
+/* Question */
+.question {
+  position: absolute;
+  text-align: center;
+  display: none;
+}
+
+button {
+  padding: 10px 18px;
+  margin: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.yes { background: #ff4d6d; color: white; }
+.no { background: white; color: black; position: relative; }
+
+/* Cute message bubble */
+.bubble {
+  position: absolute;
+  top: -40px;
+  left: -20px;
+  background: pink;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  display: none;
+}
+
+/* Final screen */
+.final {
+  position: absolute;
+  display: none;
+  text-align: center;
+  font-size: 34px;
+  animation: fade 2s forwards;
+}
+@keyframes fade { from{opacity:0} to{opacity:1} }
+</style>
+</head>
+
+<body>
+
+<!-- Music -->
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b9c77.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* Sparkles */
+for (let i = 0; i < 60; i++) {
+  let s = document.createElement("div");
+  s.className = "sparkle";
+  s.style.top = Math.random()*100 + "vh";
+  s.style.left = Math.random()*100 + "vw";
+  s.style.animationDelay = Math.random()*2 + "s";
+  document.body.appendChild(s);
+}
+
+/* Roses */
+for (let i = 0; i < 20; i++) {
+  let r = document.createElement("div");
+  r.className = "rose";
+  r.innerHTML = "🌹";
+  r.style.left = Math.random()*100 + "vw";
+  r.style.animationDuration = (5 + Math.random()*5) + "s";
+  document.body.appendChild(r);
+}
+</script>
+
+<!-- Envelope -->
+<div class="envelope" id="envelope">
+  <div class="flap"></div>
+  <div class="card" id="card">
+    <div>
+      <h2>Amar… ❤️</h2>
+      <p>You make my world warmer, softer, and full of love.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Question -->
+<div class="question" id="question">
+  <h2>Will you be my Valentine?</h2>
+
+  <div style="position:relative; display:inline-block;">
+    <button class="no" id="noBtn">No</button>
+    <div class="bubble" id="bubble">Heyyy don’t do that 🥺</div>
+  </div>
+
+  <button class="yes" id="yesBtn">Yes</button>
+</div>
+
+<!-- Final -->
+<div class="final" id="final">
+  <p>I love you forever ❤️</p>
+</div>
+
+<script>
+const envelope = document.getElementById("envelope");
+const card = document.getElementById("card");
+const question = document.getElementById("question");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const bubble = document.getElementById("bubble");
+const final = document.getElementById("final");
+const music = document.getElementById("music");
+
+/* Start music */
+document.body.addEventListener("click", () => {
+  music.volume = 0.4;
+  music.play();
+}, { once: true });
+
+/* Open envelope */
+envelope.addEventListener("click", () => {
+  envelope.classList.add("open");
+  card.classList.add("show");
+});
+
+/* Show question */
+card.addEventListener("click", () => {
+  envelope.style.display = "none";
+  question.style.display = "block";
+});
+
+/* Cute talking No button */
+const messages = [
+  "Nooo 😭",
+  "Try the other one 🥺",
+  "Be sweet 💕",
+  "You know the right answer 😘"
+];
+
+noBtn.addEventListener("mouseover", () => {
+  const x = Math.random()*200 - 100;
+  const y = Math.random()*200 - 100;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+
+  bubble.innerText = messages[Math.floor(Math.random()*messages.length)];
+  bubble.style.display = "block";
+
+  setTimeout(()=> bubble.style.display="none", 1500);
+});
+
+/* Yes → final */
+yesBtn.addEventListener("click", () => {
+  question.style.display = "none";
+  final.style.display = "block";
+});
+</script>
+
+</body>
+</html>
