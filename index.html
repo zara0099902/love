@@ -258,7 +258,9 @@ yesBtn.addEventListener("click", () => {
   question.style.display = "none";
   final.style.display = "block";
 });
-  /* REAL FALLING PETALS */
+  
+
+/* CINEMATIC FALLING PETALS */
 
 const petalImgs = ["petal1.png"].map(src => {
   const img = new Image();
@@ -266,13 +268,14 @@ const petalImgs = ["petal1.png"].map(src => {
   return img;
 });
 
-const petals = Array.from({length: 25}, () => ({
+const petals = Array.from({length: 18}, () => ({
   x: Math.random() * window.innerWidth,
   y: Math.random() * -window.innerHeight,
-  size: 20 + Math.random() * 30,
-  speed: 0.5 + Math.random() * 1.5,
-  drift: Math.random() * 2 - 1,
-  rot: Math.random() * Math.PI
+  size: 40 + Math.random() * 60,   // bigger petals
+  speed: 0.3 + Math.random() * 0.8, // slower fall
+  drift: Math.random() * 1.2 - 0.6, // gentle side drift
+  rot: Math.random() * Math.PI,
+  blur: Math.random() * 2           // depth blur
 }));
 
 function animatePetals() {
@@ -288,10 +291,10 @@ function animatePetals() {
   petals.forEach(p => {
     p.y += p.speed;
     p.x += p.drift;
-    p.rot += 0.01;
+    p.rot += 0.002;
 
-    if (p.y > canvas.height) {
-      p.y = -20;
+    if (p.y > canvas.height + 50) {
+      p.y = -50;
       p.x = Math.random() * canvas.width;
     }
 
@@ -300,9 +303,44 @@ function animatePetals() {
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot);
+      ctx.filter = `blur(${p.blur}px)`;   // soft depth
       ctx.drawImage(img, -p.size/2, -p.size/2, p.size, p.size);
       ctx.restore();
     }
+  });
+
+  requestAnimationFrame(animatePetals);
+}
+
+animatePetals();
+  const canvas = document.getElementById("petalCanvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  petals.forEach(p => {
+    p.y += p.speed;
+    p.x += p.drift;
+    p.rot += 0.002;
+
+    if (p.y > canvas.height) {
+      p.y = -20;
+      p.x = Math.random() * canvas.width;
+    }
+
+    const img = petalImgs[0];
+    if (img.complete) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(p.rot);
+  ctx.filter = `blur(${p.blur}px)`;   // makes petals soft and romantic
+  ctx.drawImage(img, -p.size/2, -p.size/2, p.size, p.size);
+  ctx.restore();
+}
   });
 
   requestAnimationFrame(animatePetals);
